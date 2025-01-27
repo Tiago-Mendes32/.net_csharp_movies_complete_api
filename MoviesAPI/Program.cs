@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure Entity Framework Core to use MySQL as the database provider.
 // The connection string is retrieved from the application's configuration.
 builder.Services.AddDbContext<MovieContext>(opts =>
-    opts.UseMySql(
+    opts.UseLazyLoadingProxies().UseMySql(
         builder.Configuration.GetConnectionString("MovieConnection"), // Get the connection string for the database.
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MovieConnection")) // Automatically detect the MySQL server version.
     ));

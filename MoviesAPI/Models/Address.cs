@@ -12,5 +12,6 @@ namespace MoviesAPI.Models
         public string Street { get; set; }
         [Required(ErrorMessage = "The number can't be null")]
         public int Number { get; set; }
+        public virtual Cinema cinema { get; set; }
     }
 }
