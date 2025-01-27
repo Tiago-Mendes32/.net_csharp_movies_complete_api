@@ -32,7 +32,7 @@ public class MovieController : ControllerBase
         [FromBody] CreateMovieDto movieDto)
     {
         Movie movie = _mapper.Map<Movie>(movieDto);
-        _context.Movies.Add(movie);
+        _context.Add(movie);
         _context.SaveChanges();
         return CreatedAtAction(nameof(GetMovieById), new { id = movie.Id }, movie);
     }
@@ -109,7 +109,7 @@ public class MovieController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult UpdateMoviePatch(int id, JsonPatchDocument<UpdateMovieDto> patch)
+    public IActionResult UpdateMoviePatch(int id, [FromBody]JsonPatchDocument<UpdateMovieDto> patch)
     {
         Movie movie = _context.Movies.FirstOrDefault(movie => movie.Id == id);
         if (movie == null)
@@ -118,9 +118,10 @@ public class MovieController : ControllerBase
         }
 
         UpdateMovieDto toUpdateMovie = _mapper.Map<UpdateMovieDto>(movie);
+
         patch.ApplyTo(toUpdateMovie, ModelState);
 
-        if (TryValidateModel(toUpdateMovie))
+        if (!TryValidateModel(toUpdateMovie))
         {
             return ValidationProblem(ModelState);
         }
