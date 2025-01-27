@@ -4,16 +4,18 @@ using MoviesAPI.Models;
 
 namespace CinemasAPI.Profiles;
 
-public class CinemaProfile: Profile
+public class CinemaProfile : Profile
 {
     public CinemaProfile()
     {
+        // DTO to Entity mappings
         CreateMap<CreateCinemaDto, Cinema>();
-        //CreateMap<UpdateCinemaDto, Cinema>();
-        //CreateMap<Cinema, UpdateCinemaDto>();
+        CreateMap<UpdateCinemaDto, Cinema>();
+
+        // Entity to DTO mappings
+        CreateMap<Cinema, UpdateCinemaDto>();
         CreateMap<Cinema, ReadCinemaDto>()
-            .ForMember(cinemaDto => cinemaDto.AddressDto, 
-            opt => opt.MapFrom(cinema => cinema.Address));
-        CreateMap<UpdateCinemaDto, Cinema>(); 
+            .ForMember(cinemaDto => cinemaDto.Address,
+                opt => opt.MapFrom(cinema => cinema.Address));
     }
 }
